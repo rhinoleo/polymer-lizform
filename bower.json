@@ -1,0 +1,15 @@
+{
+  "name": "polymer-lizform",
+  "main": "index.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "tags-input": "jifalops/tags-input#^1.1.0",
+    "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.1.0",
+    "iron-collapse": "PolymerElements/iron-collapse#^2.2.0",
+    "lodash-element": "^1.0.2"
+  },
+  "devDependencies": {
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  }
+}

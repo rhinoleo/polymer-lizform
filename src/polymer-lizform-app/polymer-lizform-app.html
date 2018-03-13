@@ -1,0 +1,104 @@
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="tag-iconset.html">
+<link rel="import" href="tags-input-styles.html">
+<link rel="import" href="../../bower_components/lodash-element/lodash.js.html">
+
+<dom-module id="polymer-lizform-app">
+  <template strip-whitespace>
+    <custom-style>
+      <style include="tags-input-styles">
+
+      </style>
+    </custom-style>
+    <div class="container">
+      <!--<input type="button" value="Mutate array" on-tap="sortArr" />-->
+      <paper-input
+      id="input3"
+      value="{{prop}}" >
+      </paper-input>
+      <br/>
+      <div class="tags">
+        <template is="dom-repeat" items="[[tagsArr]]" as="tag">
+          <div class="tag">
+            <span>[[tag]]</span>
+            <iron-icon
+              tabindex="0"
+              hidden$="[[noEdit]]"
+              icon="tag:remove"
+              on-keydown="_onRemoveKeydown"
+              on-tap="_removeTag">
+            </iron-icon>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class PolymerLizformApp extends Polymer.GestureEventListeners(Polymer.Element) {
+      static get is() { return 'polymer-lizform-app'; }
+      static get properties() {
+        return {
+          citiesArr: {
+            type: Array,
+            value() { return ['lyon', 'paris', 'marseille', 'toulouse', 'lille'] },
+            notify: true
+          },
+          prop: {
+            type: String,
+            value: ''
+          },
+          propArr: {
+            type: Object,
+            value: {
+              items: []
+            }
+          },
+          tagsArr: {
+            computed: 'sortArr(prop)'
+          }
+        };
+      }
+
+      sortArr(prop) {
+        let propArr = this.propArr;
+        propArr = this.prop.split(' ');
+        let citiesArr = this.citiesArr;
+        let tagsArr = _.intersection(propArr, citiesArr);
+        return tagsArr;
+      }
+
+      remove(index) {
+        tagsArr = this.tagsArr;
+        tagVal = tagsArr[index];
+        prop = this.prop;
+        propArr = this.prop.split(' ');
+        let removed = this.splice('tagsArr', index, 1);
+        let removedProp = _.pull(propArr, tagVal)
+        console.log('removeProp :', removedProp);
+        console.log('propArr :', propArr);
+        prop = this.propArr.split(' ');
+      }
+
+      _removeTag(e) {
+        // console.log('onremove', e, tag);
+        this.remove(e.model.index);
+        this.focus();
+      }
+
+      _onRemoveKeydown(e) {
+        if (e.keyCode === 13 || e.keyCode === 32) {  // enter or space
+          this._removeTag(e);
+        }
+      }
+
+    }
+    customElements.define(PolymerLizformApp.is, PolymerLizformApp);
+  </script>
+</dom-module>

@@ -1,0 +1,33 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/tags-input/tags-input.html">
+<dom-module id="polymer-lizform-app">
+    <template>
+        <style>
+        :host {
+            display: block;
+        }
+        </style>
+        <h2>Hello [[prop1]]!</h2>
+        <tags-input autofocus label="Tags" tag-label="Add tag" min-length="3" max-length="16"></tags-input>
+    </template>
+
+    <script>
+        /**
+        * @customElement
+        * @polymer
+        */
+        class PolymerLizformApp extends Polymer.Element {
+        static get is() { return 'polymer-lizform-app'; }
+        static get properties() {
+            return {
+            prop1: {
+                type: String,
+                value: 'polymer-lizform-app'
+            }
+            };
+        }
+        }
+
+        window.customElements.define(PolymerLizformApp.is, PolymerLizformApp);
+    </script>
+</dom-module>
