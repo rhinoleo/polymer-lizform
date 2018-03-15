@@ -1,24 +1,59 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="tag-iconset.html">
-<link rel="import" href="tags-input-styles.html">
 <link rel="import" href="../../bower_components/lodash-element/lodash.js.html">
 
 <dom-module id="polymer-lizform-app">
   <template strip-whitespace>
     <custom-style>
-      <style include="tags-input-styles">
-
+      <style >
+        .form {
+          display: flex;          
+        }
+        .input {
+          width: 100%;
+        }
+        .button {
+          width: 50px;
+        }
+        .tags {
+          @apply --layout-horizontal;
+          @apply --layout-center;
+          @apply --layout-wrap;
+          margin-top:20px;
+          font-family: var(--paper-font-common-base_-_font-family);
+        }
+        .tag {
+          padding: 1px 2px;
+          margin: 2px;
+          border: 1px solid #3f51b5;
+          border-radius: 3px;
+          background-color: #d9ddf2;
+          @apply --tags-existing-tag;
+        }
+        #input {
+          @apply --tags-input;
+        }
+        iron-icon {
+          --iron-icon-height: var(--tags-remove-icon-size, 12px);
+          --iron-icon-width: var(--tags-remove-icon-size, 12px);
+          @apply --tags-remove-icon;
+        }
       </style>
     </custom-style>
     <div class="container">
-      <!--<input type="button" value="Mutate array" on-tap="sortArr" />-->
-      <paper-input
-      id="input3"
-      value="{{prop}}" >
-      </paper-input>
-      <br/>
+      
+      <div class="form">
+        <paper-input
+        id="input"
+        class="input"
+        value="{{inputStr}}" >
+        </paper-input>  
+        <paper-button raised on-tap="sortArr" class="button">OK</paper-button>
+      </div>
+
       <div class="tags">
         <template is="dom-repeat" items="[[tagsArr]]" as="tag">
           <div class="tag">
@@ -27,12 +62,12 @@
               tabindex="0"
               hidden$="[[noEdit]]"
               icon="tag:remove"
-              on-keydown="_onRemoveKeydown"
               on-tap="_removeTag">
             </iron-icon>
           </div>
         </template>
       </div>
+
     </div>
   </template>
 
@@ -50,52 +85,46 @@
             value() { return ['lyon', 'paris', 'marseille', 'toulouse', 'lille'] },
             notify: true
           },
-          prop: {
+          inputStr: {
             type: String,
             value: ''
           },
-          propArr: {
-            type: Object,
-            value: {
-              items: []
-            }
+          inputArr: {
+            type: Array,
+            value() { return [] },
+            notify: true
           },
           tagsArr: {
-            computed: 'sortArr(prop)'
+            type: Array,
+            value() { return [] },
+            notify: true
           }
         };
       }
 
-      sortArr(prop) {
-        let propArr = this.propArr;
-        propArr = this.prop.split(' ');
+      sortArr() {
+        let inputValue = this.$.input.value;
+        console.log(inputValue);
+        let inputArr = inputValue.split(' ');
         let citiesArr = this.citiesArr;
-        let tagsArr = _.intersection(propArr, citiesArr);
-        return tagsArr;
+        let tagsArr = this.tagsArr;
+        this.tagsArr = _.intersection(inputArr, citiesArr);
+        console.log('tagsArr', tagsArr);
+        let tagsStr = tagsArr.join(' ');
+        console.log('tagsStr', tagsStr);
+        this.$.input.value = this.$.input.value.replace(inputValue, tagsStr);
+        console.log('input.value :',this.$.input.value);
       }
 
       remove(index) {
-        tagsArr = this.tagsArr;
-        tagVal = tagsArr[index];
-        prop = this.prop;
-        propArr = this.prop.split(' ');
+        let tagsArr = this.tagsArr;
+        let tagVal = this.tagsArr[index];
         let removed = this.splice('tagsArr', index, 1);
-        let removedProp = _.pull(propArr, tagVal)
-        console.log('removeProp :', removedProp);
-        console.log('propArr :', propArr);
-        prop = this.propArr.split(' ');
       }
 
       _removeTag(e) {
-        // console.log('onremove', e, tag);
         this.remove(e.model.index);
         this.focus();
-      }
-
-      _onRemoveKeydown(e) {
-        if (e.keyCode === 13 || e.keyCode === 32) {  // enter or space
-          this._removeTag(e);
-        }
       }
 
     }
