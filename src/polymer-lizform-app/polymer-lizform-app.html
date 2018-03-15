@@ -104,22 +104,25 @@
 
       sortArr() {
         let inputValue = this.$.input.value;
-        console.log(inputValue);
+        console.log('input.value :',inputValue);
         let inputArr = inputValue.split(' ');
         let citiesArr = this.citiesArr;
         let tagsArr = this.tagsArr;
         this.tagsArr = _.intersection(inputArr, citiesArr);
         console.log('tagsArr updated :', this.tagsArr);
         let tagsStr = this.tagsArr.join(' ');
-        console.log('tagsStr', tagsStr);
         this.$.input.value = this.$.input.value.replace(inputValue, tagsStr);
-        console.log('input.value :',this.$.input.value);
+        console.log('input.value updated :',this.$.input.value);
       }
 
       remove(index) {
         let tagsArr = this.tagsArr;
         let tagVal = this.tagsArr[index];
         let removed = this.splice('tagsArr', index, 1);
+        console.log('tagsArr update after remove :', this.tagsArr);
+        let inputValue = this.$.input.value;
+        let tagsStr = this.tagsArr.join(' ');
+        this.$.input.value = this.$.input.value.replace(inputValue, tagsStr);
       }
 
       _removeTag(e) {
