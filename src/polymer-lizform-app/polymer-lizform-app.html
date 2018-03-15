@@ -109,8 +109,8 @@
         let citiesArr = this.citiesArr;
         let tagsArr = this.tagsArr;
         this.tagsArr = _.intersection(inputArr, citiesArr);
-        console.log('tagsArr', tagsArr);
-        let tagsStr = tagsArr.join(' ');
+        console.log('tagsArr updated :', this.tagsArr);
+        let tagsStr = this.tagsArr.join(' ');
         console.log('tagsStr', tagsStr);
         this.$.input.value = this.$.input.value.replace(inputValue, tagsStr);
         console.log('input.value :',this.$.input.value);
